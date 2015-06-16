@@ -6,7 +6,6 @@ _       = require 'lodash'
 
 REDDIT_URL = 'https://www.reddit.com/user/d0nkeh/m/corgi/.json'
 
-
 corgi_request = ->
   p = q.defer()
 
@@ -26,10 +25,9 @@ corgi_request = ->
 # Functional corgi url extraction.
 extract_corgis = (corgis) ->
   _(corgis).map (corgi) ->
-    corgi.data
+    corgi.data.url
   .filter (corgi) ->
-    /imgur/i.test corgi.url
-  .pluck 'url'
+    /imgur/i.test corgi
   .value()
 
 module.exports = ->
