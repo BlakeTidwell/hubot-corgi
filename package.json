@@ -8,7 +8,7 @@
   },
   "author": "Ryan Schultz",
   "license": "MIT",
-  "repository": "git://github.com/GrioSF/hubot-corgi",
+  "repository": "git://github.com/ryands/hubot-corgi",
   "devDependencies": {
     "chai": "^3.0.0",
     "coffee-script": "^1.9.3",
