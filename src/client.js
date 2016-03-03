@@ -1,67 +1,68 @@
 // Corgi Client
 import request from 'request';
-import q from 'q';
 import _ from 'lodash';
+import app from '../package';
+import process from 'process';
 
+const REDDIT_URL = 'https://www.reddit.com/user/d0nkeh/m/corgi/.json';
 
-const REDDIT_URL = 'https://www.reddit.com/user/d0nkeh/m/corgi/.json'
-
-let corgi_request = () => {
-  let p = q.defer();
-
-  request.get({ 
-    uri: REDDIT_URL,
-    method: 'GET',
-    json: true, 
-    headers: {
-      'User-Agent': 'hubot:corgi:v0.2.0 (by /u/d0nkeh)'
-    }
-  }, (err, res, body) => {
-    if (err || res.statusCode != 200) {
-        p.reject(err);
-    } else {
-        p.resolve(body.data.children);
-    }
+function corgiRequest() {
+  return new Promise((resolve, reject) => {
+    request.get({ 
+      uri: REDDIT_URL,
+      method: 'GET',
+      json: true, 
+      headers: {
+        'User-Agent': `hubot:corgi:${app.version} (by /u/d0nkeh)`
+      }
+    }, (err, res, body) => {
+      if (err || res.statusCode != 200) {
+        reject(err);
+      } else {
+        resolve(body.data.children);
+      }
+    });
   });
-  return p.promise;
-};
+}
 
 // Functional corgi url extraction.
-let extract_corgis = (corgis) => {
+function extractCorgis(corgis) {
   return _(corgis).map((corgi) => {
     return corgi.data.url;
   }).filter((corgi) => {
-    return /imgur/i.test(corgi)
+    return /imgur/i.test(corgi);
   }).map((corgi) => {
     // TODO resolve imgur .link if it is not direct.
-    return corgi;
-  }).value();
-};
-
-let imgur_to_image = (id) => {
-  let p = q.defer();
-
-  request.get({
-    uri: 'https://api.imgur.com/3/image/' + id,
-    method: 'GET',
-    json: true,
-    headers: {
-      'Authorization': "Client-ID " + process.env.HUBOT_IMGUR_CLIENT_ID
-    }
-  }, (err, res, body) => {
-    if (err || res.statusCode != 200) { 
-        p.reject(err);
+    if (!corgi.match(/i\.imgur\.com|\.(?:jpg|png)$/i)) {
+      let id = corgi.substring(corgi.lastIndexOf('/')+1);
+      return imgurToImageLink(id);
     } else {
-        p.resolve(body.data.link);
+      return corgi;
     }
-  });
+  }).value();
+}
 
-  return p.promise;
-};
-
-export default function () {
-  return corgi_request().then(extract_corgis, (err) => {
-    console.error('Corgi problem :(');
-    return q.reject(err);
+function imgurToImageLink(id) {
+  return new Promise((resolve, reject) => {
+    request.get({
+      uri: 'https://api.imgur.com/3/image/' + id,
+      json: true,
+      headers: {
+        'Authorization': 'Client-ID ' + process.env.HUBOT_IMGUR_CLIENT_ID
+      }
+    }, (err, res, body) => {
+      if (err || res.statusCode != 200) { 
+        reject(err, res);
+      } else {
+        resolve(body.data.link);
+      }
+    });
   });
-};
+}
+
+function corgiFn() {
+  return corgiRequest().then(extractCorgis);
+}
+
+export {imgurToImageLink, corgiRequest, corgiFn as default};
+
