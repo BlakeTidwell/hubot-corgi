@@ -1,18 +1,9 @@
-// Corgi plugin for hubot.  Animate wasn't doing a good enough job at finding 
-// corgi pics and gifs.
-
-import client from './client';
-
-export default function (robot) {
-  robot.respond(/corgi gif/, (msg) => {
-    msg.send('Corgi gifs coming soon, for now just use the regular command "corgi [me]"');
+module.exports = (robot) => {
+  robot.respond(/hello/, (res) => {
+    return res.reply("hello!");
   });
 
-  robot.respond(/corgi(?: me)?$/, (msg) => {
-    client().then((corgis) => {
-      msg.send(msg.random(corgis));
-    });
+  robot.hear(/orly/, (res) => {
+    return res.send("yarly");
   });
-}
-
-
+};
