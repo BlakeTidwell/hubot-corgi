@@ -1,9 +1,19 @@
 var
   Helper = require('hubot-test-helper'),
   chai = require('chai'),
-  expect = chai.expect;
+  expect = chai.expect,
+  sinon = require('sinon'),
+  corggit = require('../lib/corggit');
 
-helper = new Helper('../src/corgi.js')
+let helper = new Helper('../src/corgi.js')
+
+var promiseDelay = function(length) {
+  length = length || 1000;
+  return new Promise((resolve, reject) => {
+    setTimeout(() => resolve(), length);
+  });
+};
+
 
 describe('corgi', () => {
   beforeEach(() => {
@@ -14,21 +24,6 @@ describe('corgi', () => {
     this.room.destroy();
   });
 
-  it('responds to hello', () => {
-    this.room.user.say('alice', '@hubot hello').then(() => {
-      expect(this.room.messages).to.eql([
-        ['alice', '@hubot hello'],
-        ['hubot', '@alice hello!'],
-      ]);
-    });
-  });
+  it('responds to corgi');
 
-  it('hears orly', () => {
-    this.room.user.say('bob', 'just wanted to say orly').then(() => {
-      expect(this.room.messages).to.eql([
-        ['bob', 'just wanted to say orly'],
-        ['hubot', 'yarly']
-      ]);
-    });
-  });
 });

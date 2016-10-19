@@ -1,23 +1,27 @@
 {
   "name": "hubot-corgi",
   "description": "Random corgs",
-  "version": "0.3.0",
+  "version": "0.5.0",
   "author": "ryan <ryan@ryands.org>",
   "license": "MIT",
   "keywords": "hubot, hubot-scripts",
   "repository": {
     "type": "git",
-    "url": "git://github.com/hubot-scripts/hubot-corgi.git"
+    "url": "git://github.com/ryands/hubot-corgi.git"
   },
   "bugs": {
-    "url": "https://github.com/hubot-scripts/hubot-corgi/issues"
+    "url": "https://github.com/ryands/hubot-corgi/issues"
   },
   "peerDependencies": {
     "hubot": "2.x"
   },
+  "engines": {
+    "node": "6.x"
+  },
   "devDependencies": {
     "chai": "~3.5.0",
     "coffee-script": "~1.11.1",
+    "dotenv": "^2.0.0",
     "hubot": "2.x",
     "hubot-test-helper": "~1.5.0",
     "matchdep": "~1.0.1",
@@ -27,6 +31,10 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/.bin/mocha --compilers coffee:coffee-script/register --require coffee-script/register test/"
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha --compilers coffee:coffee-script/register --require ./test/test-helper test/"
+  },
+  "dependencies": {
+    "request": "^2.75.0",
+    "request-promise-native": "^1.0.3"
   }
 }

@@ -1,9 +1,7 @@
-module.exports = (robot) => {
-  robot.respond(/hello/, (res) => {
-    return res.reply("hello!");
-  });
+var corggit = require('../lib/corggit');
 
-  robot.hear(/orly/, (res) => {
-    return res.send("yarly");
+module.exports = (robot) => {
+  robot.respond(/corgi/, (res) => {
+    return corggit().then(post => res.send(post.url));
   });
 };
