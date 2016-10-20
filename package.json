@@ -1,7 +1,7 @@
 {
   "name": "hubot-corgi",
   "description": "Random corgs",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "author": "ryan <ryan@ryands.org>",
   "license": "MIT",
   "keywords": "hubot, hubot-scripts",
