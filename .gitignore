@@ -3,3 +3,4 @@
 .env.test
 *.swp
 /tmp
+npm-debug.log
